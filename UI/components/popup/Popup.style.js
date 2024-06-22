@@ -21,7 +21,6 @@ export const s = StyleSheet.create({
   content: {
     fontSize: 16,
     marginBottom: 20,
-    textAlign: "center",
   },
   closeButton: {
     padding: 10,

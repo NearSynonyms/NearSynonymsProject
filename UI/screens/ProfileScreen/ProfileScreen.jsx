@@ -35,7 +35,14 @@ export default function ProfileScreen({ navigation, user }) {
     setPopupContent(content);
     setPopupVisible(true);
   };
+  
+  const aboutUsText = `
+  • We are a team of five dedicated developers in our third year of a bachelor's degree in computer science.
 
+  • Our team members, Yarin, Guy, Itay, Shay, and Yarden, are passionate about creating innovative and user-friendly applications.
+  
+  • Together, we are committed to leveraging our skills and knowledge to develop impactful solutions.
+  `;
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -81,7 +88,7 @@ export default function ProfileScreen({ navigation, user }) {
             onPress={() =>
               handlePress(
                 "About Us",
-                "We are a team of five dedicated developers in our third year of a bachelor's degree in computer science. Our team members, Yarin, Guy, Itay, Shay, and Yarden, are passionate about creating innovative and user-friendly applications. Together, we are committed to leveraging our skills and knowledge to develop impactful solutions."
+                aboutUsText
               )
             }
           >

@@ -30,9 +30,9 @@ export const s = StyleSheet.create({
     textAlign: "center",
   },
   image: {
-    width: 200,
-    height: 200,
     marginBottom: 20,
+    height: 300,
+    width: 200,
   },
   buttonRow: {
     flexDirection: "row",
