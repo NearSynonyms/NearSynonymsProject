@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Near-Synonyms",
+    "slug": "Near-Synonyms",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/Images/Logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/Images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/Images/Logo.png",
+        "backgroundColor": "#000000"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": ["expo-font"]
+  }
+}
