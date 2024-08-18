@@ -6,7 +6,7 @@ export default function SignOut() {
     return null;
   }
   return (
-    <View style={{ marginTop: 90 }}>
+    <View style={{ marginTop: 10 }}>
       <Button
         title="Sign Out"
         color={"red"}

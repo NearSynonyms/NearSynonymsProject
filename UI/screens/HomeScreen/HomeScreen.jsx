@@ -20,6 +20,8 @@ export default function HomeScreen({ navigation, user }) {
   const assetsForLoginScreen = [
     require("../../assets/Images/Home.png"),
     require("../../assets/Images/HomeLogo.png"),
+    require("../../assets/Images/appbar.png"),
+    require("../../assets/icons/ExitGame.png"),
   ];
 
   const isReady = usePreloadAssets(assetsForLoginScreen);
@@ -31,6 +33,8 @@ export default function HomeScreen({ navigation, user }) {
 
   const backgroundImg = assetsForLoginScreen[0];
   const homeLogo = assetsForLoginScreen[1];
+  const appBarImg = assetsForLoginScreen[2];
+  const exitIcon = assetsForLoginScreen[3];
 
   const questionMarks = Array.from({ length: 10 }, (_, index) => (
     <AnimatedQuestionMark
@@ -59,13 +63,20 @@ export default function HomeScreen({ navigation, user }) {
           />
         </View>
         <View style={s.txtView}>
+          <Txt style={s.txt}>NEAR</Txt>
           <Txt style={s.txt}>SYNONYMS</Txt>
-          <Txt style={s.txt}>GAME</Txt>
         </View>
         <View style={s.btnView}>
           <TouchableOpacity
             style={s.btn}
-            onPress={() => navigation.navigate("Exercise")}
+            onPress={() =>
+              navigation.navigate("Game", {
+                backgroundImg,
+                appBarImg,
+                exitIcon,
+                user,
+              })
+            }
           >
             <View style={s.btnContent}>
               <Txt style={s.btnTxt}>Play</Txt>
