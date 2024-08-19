@@ -72,6 +72,7 @@ export default function HomeScreen({ navigation, user }) {
             onPress={() =>
               navigation.navigate("Game", {
                 backgroundImg,
+                homeLogo,
                 appBarImg,
                 exitIcon,
                 user,

@@ -1,4 +1,4 @@
-import ApiService from "../API/ApiService";
+import apiService from "../API/ApiService";
 class Gameplay {
   constructor(user) {
     this.userId = user.id;
@@ -7,7 +7,7 @@ class Gameplay {
   }
 
   async init() {
-    this.sentencesArray = await ApiService.getSentences(this.userId, "false");
+    this.sentencesArray = await apiService.getSentences(this.userId, "false");
     this.sentencesArray = this.sentencesArray.map((sentence) => {
       if (Math.random() > 0.5) {
         return {

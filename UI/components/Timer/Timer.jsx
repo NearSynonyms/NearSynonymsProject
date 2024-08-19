@@ -5,6 +5,7 @@ import { s } from "./Timer.style";
 export default function Timer({ onTimerEnd, reset, stop }) {
   const timerWidth = useRef(new Animated.Value(1)).current;
   const isRunning = useRef(true);
+  const animation = useRef(null);
   useEffect(() => {
     if (reset) {
       isRunning.current = false;
@@ -15,11 +16,12 @@ export default function Timer({ onTimerEnd, reset, stop }) {
 
   const startTimer = () => {
     isRunning.current = true;
-    Animated.timing(timerWidth, {
+    animation.current = Animated.timing(timerWidth, {
       toValue: 0,
       duration: 10000, // 45 seconds
       useNativeDriver: false,
-    }).start(() => {
+    });
+    animation.current.start(() => {
       if (isRunning.current && onTimerEnd) {
         onTimerEnd();
       }
@@ -29,12 +31,15 @@ export default function Timer({ onTimerEnd, reset, stop }) {
   useEffect(() => {
     if (stop) {
       isRunning.current = false;
+      if (animation.current) {
+        animation.current.stop();
+      }
     }
   }, [stop]);
 
   useEffect(() => {
     startTimer();
-  }, [timerWidth]);
+  }, []);
 
   const widthInterpolate = timerWidth.interpolate({
     inputRange: [0, 1],

@@ -14,6 +14,7 @@ import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as SecureStore from "expo-secure-store";
+import apiService from "./API/ApiService";
 
 const Stack = createStackNavigator();
 
@@ -35,7 +36,7 @@ const tokenCache = {
 };
 
 const MainApp = () => {
-  const { isLoaded: isUserLoaded, user } = useUser();
+  const { user } = useUser();
   const [isFontLoaded] = useFonts({
     "Alata-Regular": require("./assets/Fonts/Alata-Regular.ttf"),
   });

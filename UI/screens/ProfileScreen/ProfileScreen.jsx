@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { View, TouchableOpacity, ScrollView, SafeAreaView } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+  Alert,
+} from "react-native";
 import { Txt } from "../../components/Txt/Txt";
 import Icon from "react-native-vector-icons/FontAwesome";
 import CircularFrameWithButton from "../../components/circularFrameWithButton/CircularFrameWithButton";
@@ -7,33 +13,83 @@ import RadioButtons from "../../components/RadioButtons/RadioButtons";
 import Popup from "../../components/popup/Popup";
 import SignOut from "../../components/signOut/SignOut";
 import { s } from "./ProfileScreen.style";
+import apiService from "../../API/ApiService";
 
 export default function ProfileScreen({ navigation, user }) {
-  const isHebrew = (string) => {
-    return /[\u0590-\u05FF]/.test(string);
-  };
-  const capitalizeFirstLetter = (string) => {
-    if (!string) return "";
-    if (isHebrew(string)) return string; // If the string is in Hebrew, return it as is
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-  const firstName = capitalizeFirstLetter(user.firstName);
-  const lastName = capitalizeFirstLetter(user.lastName);
+  const [userProfile, setUserProfile] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [selectedOption, setSelectedOption] = useState("Low");
-  const options = ["Low", "Medium", "High"];
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupTitle, setPopupTitle] = useState("");
   const [popupContent, setPopupContent] = useState("");
+  const options = ["Low", "Medium", "High"];
 
-  const handlePressOnSupportSuction = (title, content) => {
-    setPopupTitle(title);
-    setPopupContent(content);
-    setPopupVisible(true);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user && user.id) {
+        try {
+          const data = await apiService.getUserState(user.id);
+          setUserProfile(data);
+          setSelectedImage(data?.image || null);
+          setSelectedOption(
+            data?.difficulty === 3
+              ? "High"
+              : data?.difficulty === 2
+              ? "Medium"
+              : "Low"
+          );
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
+
+  const isHebrew = (string) => {
+    return /[\u0590-\u05FF]/.test(string);
   };
 
-  const handlePressOnSave = (title, content) => {
-    //call to server api
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return "";
+    if (isHebrew(string)) return string;
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
+  const firstName = capitalizeFirstLetter(user.firstName);
+  const lastName = capitalizeFirstLetter(user.lastName);
+
+  const handleImagePicked = (imageUri) => {
+    setSelectedImage(imageUri);
+  };
+
+  const textLevelToInteger = () => {
+    switch (selectedOption) {
+      case "Low":
+        return 1;
+      case "Medium":
+        return 2;
+      case "High":
+        return 3;
+      default:
+        return 1;
+    }
+  };
+
+  const handlePressOnSave = async (title, content) => {
+    try {
+      const level = textLevelToInteger();
+      await apiService.updateUserProfile(user.id, selectedImage, level);
+      setPopupTitle(title);
+      setPopupContent(content);
+      setPopupVisible(true);
+    } catch (error) {
+      Alert.alert("Error", "Failed to save the changes.");
+    }
+  };
+
+  const handlePressOnSupportSuction = (title, content) => {
     setPopupTitle(title);
     setPopupContent(content);
     setPopupVisible(true);
@@ -46,6 +102,7 @@ export default function ProfileScreen({ navigation, user }) {
   
   • Together, we are committed to leveraging our skills and knowledge to develop impactful solutions.
   `;
+
   return (
     <SafeAreaView style={s.container}>
       <ScrollView>
@@ -60,7 +117,7 @@ export default function ProfileScreen({ navigation, user }) {
         </View>
         <View style={s.profileContainer}>
           <View style={s.imageContainer}>
-            <CircularFrameWithButton />
+            <CircularFrameWithButton onImagePicked={handleImagePicked} />
           </View>
           <View style={s.profileInfo}>
             <Txt style={s.profileName}>{firstName}</Txt>
@@ -109,13 +166,20 @@ export default function ProfileScreen({ navigation, user }) {
             onPress={() =>
               handlePressOnSave(
                 "Update Changes",
-                "Your changes has been successfully updated"
+                "Your changes have been successfully updated"
               )
             }
           >
             <Txt style={s.saveTxt}>Save Changes</Txt>
           </TouchableOpacity>
-          <SignOut />
+          <SignOut
+            onSignOut={() =>
+              handlePressOnSave(
+                "Update Changes",
+                "Your changes have been successfully updated"
+              )
+            }
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

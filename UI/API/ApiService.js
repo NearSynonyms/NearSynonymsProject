@@ -29,7 +29,6 @@ class ApiService {
       );
       return response.data;
     } catch (error) {
-      console.log("ok");
       return sentences;
       //this.handleError(error);
     }

@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-expo";
 import { View, Button } from "react-native";
-export default function SignOut() {
+export default function SignOut({ onSignOut }) {
   const { isLoaded, signOut } = useAuth();
   if (!isLoaded) {
     return null;
@@ -11,6 +11,7 @@ export default function SignOut() {
         title="Sign Out"
         color={"red"}
         onPress={() => {
+          onSignOut();
           signOut();
         }}
       />

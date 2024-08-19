@@ -4,7 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { s } from "./CircularFrameWithButton.style";
 
-export default function CircularFrameWithButton() {
+export default function CircularFrameWithButton({ onImagePicked }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const pickImage = async () => {
@@ -30,10 +30,10 @@ export default function CircularFrameWithButton() {
       allowsMultipleSelection: false,
     });
 
-    console.log(result);
-
-    if (!result.cancelled) {
-      setSelectedImage(result.assets[0].uri);
+    if (!result.canceled) {
+      const imageUri = result.assets[0].uri;
+      setSelectedImage(imageUri);
+      onImagePicked(imageUri);
     }
   };
 
@@ -45,7 +45,7 @@ export default function CircularFrameWithButton() {
           source={
             selectedImage
               ? { uri: selectedImage }
-              : require("../../assets/Images/Avatar.png") // replace with your default image
+              : require("../../assets/Images/Avatar.png")
           }
           style={s.image}
         />

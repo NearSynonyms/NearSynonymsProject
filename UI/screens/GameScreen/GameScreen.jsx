@@ -12,9 +12,9 @@ import { s } from "./GameScreen.style";
 import { LinearGradient } from "expo-linear-gradient";
 import EndGamePopup from "../../components/endGamePopup/EndGamePopup";
 import Gameplay from "../../GameLogic/Gameplay";
-
+import Loading from "../../components/loading/Loading";
 export default function GameScreen({ route, navigation }) {
-  const { backgroundImg, appBarImg, exitIcon, user } = route.params;
+  const { backgroundImg, homeLogo, appBarImg, exitIcon, user } = route.params;
   const [gameplay, setGameplay] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -27,6 +27,7 @@ export default function GameScreen({ route, navigation }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
   const [stopTimer, setStopTimer] = useState(false);
+  const [displayFullSentence, setDisplayFullSentence] = useState(false);
 
   const initializeGame = async () => {
     const game = new Gameplay(user);
@@ -34,6 +35,10 @@ export default function GameScreen({ route, navigation }) {
     setGameplay(game);
     const question = game.getCurrentQuestion();
     setCurrentQuestion(question);
+    setCurrentIndex(0);
+    setSelectedAnswer(null);
+    setIsAnswerCorrect(null);
+    setDisplayFullSentence(false);
   };
   useEffect(() => {
     initializeGame();
@@ -53,7 +58,8 @@ export default function GameScreen({ route, navigation }) {
   };
 
   const handleTimerEnd = () => {
-    displayPopup("Game Over", "Pay attention to the time", "Exit", "Retry");
+    setPopupVisible(false);
+    displayPopup("Game Over", "Pay attention to the time", "Exit", "Try Again");
   };
 
   const handleExitButton = () => {
@@ -68,23 +74,25 @@ export default function GameScreen({ route, navigation }) {
   const handlePopupButtonPress = (btn2Txt) => {
     if (btn2Txt === "Cancel") {
       setPopupVisible(false);
-    } else if (btn2Txt === "Retry") {
+    } else if (btn2Txt === "Try Again") {
+      setCurrentQuestion(null);
       handleResetGame();
     }
   };
 
   const handleResetGame = async () => {
+    setResetTimer(false);
+    setStopTimer(true);
     setPopupVisible(false);
-    setResetTimer(true);
-
-    if (gameplay) {
-      await initializeGame();
-    }
-    setTimeout(() => setResetTimer(false), 0);
+    await initializeGame();
+    setTimeout(() => {
+      setStopTimer(false);
+      setResetTimer(true);
+    }, 0);
   };
 
   if (!currentQuestion) {
-    return <Text>Loading...</Text>; // Or a loading spinner
+    return <Loading backgroundImg={backgroundImg} homeLogo={homeLogo} />;
   }
 
   const handleButtonPress = (answer) => {
@@ -99,27 +107,32 @@ export default function GameScreen({ route, navigation }) {
   };
 
   const handleCorrectAnswer = () => {
+    setStopTimer(true);
+    setDisplayFullSentence(true);
     setTimeout(() => {
+      setStopTimer(false);
+      setDisplayFullSentence(false);
       gameplay.incrementIndex();
       const question = gameplay.getCurrentQuestion();
       setCurrentQuestion(question);
       setCurrentIndex(gameplay.getCurrentIndex());
       setResetTimer(true);
-    }, 1000);
+    }, 2500);
+    setResetTimer(false);
   };
 
   const handleIncorrectAnswer = () => {
     setStopTimer(true);
+    setDisplayFullSentence(true);
     setTimeout(() => {
       displayPopup(
         "Game Over",
-        "You choose the wrong answer",
+        "You chose the wrong answer",
         "Exit",
         "Try Again"
       );
-    }, 1000);
+    }, 2500);
   };
-
   const getButtonStyle = (answer) => {
     if (selectedAnswer === answer) {
       return isAnswerCorrect
@@ -127,6 +140,19 @@ export default function GameScreen({ route, navigation }) {
         : [s.buttonAnswer, { borderWidth: 2, borderColor: "#d10909" }];
     }
     return s.buttonAnswer;
+  };
+
+  const fullSentenceStyle = (sentence, correctWord) => {
+    const parts = sentence.split(correctWord);
+    return (
+      <Txt style={s.questionTxt}>
+        {parts[0]}
+        <Txt style={{ color: "#8c60a1", fontWeight: "bold" }}>
+          {correctWord}
+        </Txt>
+        {parts[1]}
+      </Txt>
+    );
   };
 
   const borderColors = [
@@ -173,7 +199,16 @@ export default function GameScreen({ route, navigation }) {
             <Txt style={s.questionNumberTxt}>/10</Txt>
           </View>
           <View style={s.question}>
-            <Txt style={s.questionTxt}>{currentQuestion.partial_sentence}</Txt>
+            {displayFullSentence ? (
+              fullSentenceStyle(
+                currentQuestion.sentence,
+                currentQuestion.correct_word
+              )
+            ) : (
+              <Txt style={s.questionTxt}>
+                {currentQuestion.partial_sentence}
+              </Txt>
+            )}
           </View>
         </View>
         <Timer
