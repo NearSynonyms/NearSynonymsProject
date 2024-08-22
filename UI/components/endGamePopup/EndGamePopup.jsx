@@ -2,6 +2,8 @@ import React from "react";
 import { View, Modal, TouchableOpacity } from "react-native";
 import { Txt } from "../Txt/Txt";
 import { s } from "./EndGamePopup.style";
+import { Fireworks } from "../fireworks/Fireworks";
+
 export default function EndGamePopup({
   visible,
   title,
@@ -9,6 +11,7 @@ export default function EndGamePopup({
   onPressBtn1,
   onPressBtn2,
   btn1Txt,
+  isConfetti,
   btn2Txt,
 }) {
   return (
@@ -19,7 +22,7 @@ export default function EndGamePopup({
       onRequestClose={onPressBtn1}
     >
       <View style={s.overlay}>
-        <View style={s.popup}>
+        <View style={[s.popup, { zIndex: 10 }]}>
           <View style={s.header}>
             <Txt style={s.title}>{title}</Txt>
           </View>
@@ -36,6 +39,7 @@ export default function EndGamePopup({
           </View>
         </View>
       </View>
+      {isConfetti && <Fireworks />}
     </Modal>
   );
 }

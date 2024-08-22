@@ -15,8 +15,8 @@ import SignOut from "../../components/signOut/SignOut";
 import { s } from "./ProfileScreen.style";
 import apiService from "../../API/ApiService";
 
-export default function ProfileScreen({ navigation, user }) {
-  const [userProfile, setUserProfile] = useState(null);
+export default function ProfileScreen({ route, navigation }) {
+  const { backgroundImg, homeLogo, user } = route.params;
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedOption, setSelectedOption] = useState("Low");
   const [popupVisible, setPopupVisible] = useState(false);
@@ -29,14 +29,12 @@ export default function ProfileScreen({ navigation, user }) {
       if (user && user.id) {
         try {
           const data = await apiService.getUserState(user.id);
-          setUserProfile(data);
-          setSelectedImage(data?.image || null);
+          console.log(data);
+          setSelectedImage(data?.picture || null);
+
+          const difficulty = parseInt(data?.difficulty, 10);
           setSelectedOption(
-            data?.difficulty === 3
-              ? "High"
-              : data?.difficulty === 2
-              ? "Medium"
-              : "Low"
+            difficulty === 3 ? "High" : difficulty === 2 ? "Medium" : "Low"
           );
         } catch (error) {
           console.error("Failed to fetch user data:", error);
@@ -79,8 +77,26 @@ export default function ProfileScreen({ navigation, user }) {
 
   const handlePressOnSave = async (title, content) => {
     try {
-      const level = textLevelToInteger();
-      await apiService.updateUserProfile(user.id, selectedImage, level);
+      const token = user.id;
+      const difficulty = textLevelToInteger();
+      let formData = new FormData();
+
+      formData.append("token", token);
+      formData.append("difficulty", difficulty);
+
+      if (selectedImage) {
+        const uriParts = selectedImage.split(".");
+        const fileType = uriParts[uriParts.length - 1];
+
+        formData.append("picture", {
+          uri: selectedImage,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`,
+        });
+      }
+
+      await apiService.updateUserProfile(formData);
+
       setPopupTitle(title);
       setPopupContent(content);
       setPopupVisible(true);
@@ -117,7 +133,10 @@ export default function ProfileScreen({ navigation, user }) {
         </View>
         <View style={s.profileContainer}>
           <View style={s.imageContainer}>
-            <CircularFrameWithButton onImagePicked={handleImagePicked} />
+            <CircularFrameWithButton
+              onImagePicked={handleImagePicked}
+              selectedImage={selectedImage}
+            />
           </View>
           <View style={s.profileInfo}>
             <Txt style={s.profileName}>{firstName}</Txt>

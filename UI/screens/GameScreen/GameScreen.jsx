@@ -28,6 +28,7 @@ export default function GameScreen({ route, navigation }) {
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
   const [stopTimer, setStopTimer] = useState(false);
   const [displayFullSentence, setDisplayFullSentence] = useState(false);
+  const [showFireworks, setShowFireworks] = useState(false);
 
   const initializeGame = async () => {
     const game = new Gameplay(user);
@@ -39,10 +40,17 @@ export default function GameScreen({ route, navigation }) {
     setSelectedAnswer(null);
     setIsAnswerCorrect(null);
     setDisplayFullSentence(false);
+    setShowFireworks(false);
   };
   useEffect(() => {
     initializeGame();
   }, [user.id]);
+
+  useEffect(() => {
+    if (currentIndex === 10 && isAnswerCorrect === true) {
+      handleGameCompleted();
+    }
+  }, [currentIndex, isAnswerCorrect]);
 
   const displayPopup = (title, content, txt1, txt2) => {
     setPopupVisible(true);
@@ -74,7 +82,7 @@ export default function GameScreen({ route, navigation }) {
   const handlePopupButtonPress = (btn2Txt) => {
     if (btn2Txt === "Cancel") {
       setPopupVisible(false);
-    } else if (btn2Txt === "Try Again") {
+    } else if (btn2Txt === "Try Again" || btn2Txt === "Play Again") {
       setCurrentQuestion(null);
       handleResetGame();
     }
@@ -90,7 +98,16 @@ export default function GameScreen({ route, navigation }) {
       setResetTimer(true);
     }, 0);
   };
-
+  const handleGameCompleted = () => {
+    setPopupVisible(false);
+    setShowFireworks(true);
+    displayPopup(
+      "Congratulations!",
+      "You've answered all the questions correctly!",
+      "Exit",
+      "Play Again"
+    );
+  };
   if (!currentQuestion) {
     return <Loading backgroundImg={backgroundImg} homeLogo={homeLogo} />;
   }
@@ -109,14 +126,20 @@ export default function GameScreen({ route, navigation }) {
   const handleCorrectAnswer = () => {
     setStopTimer(true);
     setDisplayFullSentence(true);
+
     setTimeout(() => {
       setStopTimer(false);
       setDisplayFullSentence(false);
-      gameplay.incrementIndex();
-      const question = gameplay.getCurrentQuestion();
-      setCurrentQuestion(question);
-      setCurrentIndex(gameplay.getCurrentIndex());
-      setResetTimer(true);
+
+      if (currentIndex < 9) {
+        gameplay.incrementIndex();
+        const question = gameplay.getCurrentQuestion();
+        setCurrentQuestion(question);
+        setCurrentIndex(gameplay.getCurrentIndex());
+        setResetTimer(true);
+      } else {
+        handleGameCompleted();
+      }
     }, 2500);
     setResetTimer(false);
   };
@@ -246,6 +269,7 @@ export default function GameScreen({ route, navigation }) {
             onPressBtn2={() => handlePopupButtonPress(btn2Txt)}
             btn1Txt={btn1Txt}
             btn2Txt={btn2Txt}
+            isConfetti={showFireworks}
           />
         </View>
       </View>

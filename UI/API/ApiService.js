@@ -8,6 +8,7 @@ class ApiService {
       headers: {
         "Content-Type": "application/json",
       },
+      timeout: 3000,
     });
   }
 
@@ -34,13 +35,13 @@ class ApiService {
     }
   }
 
-  // POST: Update user's image and difficulty level
-  async updateUserProfile(userId, image, level) {
+  // PUT: Update user's image and difficulty level
+  async updateUserProfile(formData) {
     try {
-      const response = await this.api.post(`/UpdateDetails`, {
-        userId,
-        image,
-        level,
+      const response = await this.api.put("/UpdateUserDetails", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       return response.data;
     } catch (error) {
@@ -57,5 +58,5 @@ class ApiService {
   }
 }
 
-const apiService = new ApiService("https://api.yourservice.com");
+const apiService = new ApiService("http://34.201.71.153:3000");
 export default apiService;

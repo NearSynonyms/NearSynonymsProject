@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Image, TouchableOpacity, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { s } from "./CircularFrameWithButton.style";
 
-export default function CircularFrameWithButton({ onImagePicked }) {
-  const [selectedImage, setSelectedImage] = useState(null);
+export default function CircularFrameWithButton({
+  onImagePicked,
+  selectedImage,
+}) {
+  const [imageUri, setImageUri] = useState(null);
+
+  useEffect(() => {
+    // Update local state when the selectedImage prop changes
+    setImageUri(selectedImage);
+  }, [selectedImage]);
 
   const pickImage = async () => {
     const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
@@ -32,8 +40,8 @@ export default function CircularFrameWithButton({ onImagePicked }) {
 
     if (!result.canceled) {
       const imageUri = result.assets[0].uri;
-      setSelectedImage(imageUri);
-      onImagePicked(imageUri);
+      setImageUri(imageUri); // Update the local state
+      onImagePicked(imageUri); // Notify the parent component
     }
   };
 
@@ -41,10 +49,10 @@ export default function CircularFrameWithButton({ onImagePicked }) {
     <View style={s.container}>
       <View style={s.circularFrame}>
         <Image
-          key={selectedImage}
+          key={imageUri}
           source={
-            selectedImage
-              ? { uri: selectedImage }
+            imageUri
+              ? { uri: imageUri }
               : require("../../assets/Images/Avatar.png")
           }
           style={s.image}

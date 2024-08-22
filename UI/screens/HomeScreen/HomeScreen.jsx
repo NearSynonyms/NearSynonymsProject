@@ -86,7 +86,13 @@ export default function HomeScreen({ navigation, user }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={s.btn}
-            onPress={() => navigation.navigate("Profile")}
+            onPress={() =>
+              navigation.navigate("Profile", {
+                backgroundImg,
+                homeLogo,
+                user,
+              })
+            }
           >
             <View style={s.btnContent}>
               <Txt style={s.btnTxt}>Settings</Txt>
