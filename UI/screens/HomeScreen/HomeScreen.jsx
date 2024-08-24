@@ -22,6 +22,8 @@ export default function HomeScreen({ navigation, user }) {
     require("../../assets/Images/HomeLogo.png"),
     require("../../assets/Images/appbar.png"),
     require("../../assets/icons/ExitGame.png"),
+    require("../../assets/Images/learnBackground.png"),
+    require("../../assets/icons/chatGptLogo.png"),
   ];
 
   const isReady = usePreloadAssets(assetsForLoginScreen);
@@ -35,6 +37,8 @@ export default function HomeScreen({ navigation, user }) {
   const homeLogo = assetsForLoginScreen[1];
   const appBarImg = assetsForLoginScreen[2];
   const exitIcon = assetsForLoginScreen[3];
+  const learnBackground = assetsForLoginScreen[4];
+  const chatGPTLogo = assetsForLoginScreen[5];
 
   const questionMarks = Array.from({ length: 10 }, (_, index) => (
     <AnimatedQuestionMark
@@ -84,8 +88,33 @@ export default function HomeScreen({ navigation, user }) {
               <Icon name="play" size={30} color={"#fff"} />
             </View>
           </TouchableOpacity>
+          <TouchableOpacity style={s.btn} onPress={() => setGuideVisible(true)}>
+            <View style={s.btnContent}>
+              <Txt style={s.btnTxt}>Guide </Txt>
+              <Icon name="question-circle" size={30} color={"#fff"} />
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity
             style={s.btn}
+            onPress={() =>
+              navigation.navigate("Learn", {
+                learnBackground,
+                exitIcon,
+                homeLogo,
+                chatGPTLogo,
+                user,
+              })
+            }
+          >
+            <View style={s.btnContent}>
+              <Txt style={s.btnTxt}>Learn</Txt>
+              <Icon name="graduation-cap" size={30} color={"#fff"} />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={s.footer}>
+          <TouchableOpacity
+            style={s.fotterBtn}
             onPress={() =>
               navigation.navigate("Profile", {
                 backgroundImg,
@@ -94,16 +123,7 @@ export default function HomeScreen({ navigation, user }) {
               })
             }
           >
-            <View style={s.btnContent}>
-              <Txt style={s.btnTxt}>Settings</Txt>
-              <Icon name="cogs" size={30} color={"#fff"} />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={s.btn} onPress={() => setGuideVisible(true)}>
-            <View style={s.btnContent}>
-              <Txt style={s.btnTxt}>Guide </Txt>
-              <Icon name="question-circle" size={30} color={"#fff"} />
-            </View>
+            <Icon name="cogs" size={35} color={"#fff"} />
           </TouchableOpacity>
         </View>
         <GuidePopup

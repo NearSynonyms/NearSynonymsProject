@@ -24,7 +24,6 @@ export const s = StyleSheet.create({
   },
   closeButton: {
     padding: 10,
-    backgroundColor: "#8c60a1",
     borderRadius: 5,
   },
   closeButtonText: {
@@ -33,7 +32,6 @@ export const s = StyleSheet.create({
   },
   header: {
     width: "100%",
-    backgroundColor: "#8c60a1",
     padding: 10,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,

@@ -32,7 +32,7 @@ export const s = StyleSheet.create({
   },
   btnContent: {
     flexDirection: "row",
-    alignItems: "space-between",
+    alignItems: "center",
     justifyContent: "space-between",
   },
   img_background: {
@@ -50,8 +50,8 @@ export const s = StyleSheet.create({
   btn: {
     backgroundColor: "#8c60a1",
     paddingHorizontal: 15,
-    width: 300,
-    height: 50,
+    width: "82%",
+    height: "15%",
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
@@ -73,5 +73,12 @@ export const s = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginRight: 10,
+  },
+  footer: {
+    alignItems: "flex-start",
+  },
+  fotterBtn: {
+    left: 25,
+    bottom: 10,
   },
 });

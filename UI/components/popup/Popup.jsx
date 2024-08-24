@@ -2,7 +2,15 @@ import React from "react";
 import { View, Modal, TouchableOpacity } from "react-native";
 import { Txt } from "../Txt/Txt";
 import { s } from "./Popup.style";
-export default function Popup({ visible, onClose, title, content }) {
+
+export default function Popup({
+  visible,
+  onClose,
+  title,
+  content,
+  backgroundColor,
+  buttonTxt,
+}) {
   return (
     <Modal
       transparent={true}
@@ -12,13 +20,16 @@ export default function Popup({ visible, onClose, title, content }) {
     >
       <View style={s.overlay}>
         <View style={s.popup}>
-          <View style={s.header}>
+          <View style={[s.header, { backgroundColor }]}>
             <Txt style={s.title}>{title}</Txt>
           </View>
           <View style={s.viewInfo}>
             <Txt style={s.content}>{content}</Txt>
-            <TouchableOpacity onPress={onClose} style={s.closeButton}>
-              <Txt style={s.closeButtonText}>Close</Txt>
+            <TouchableOpacity
+              onPress={onClose}
+              style={[s.closeButton, { backgroundColor }]}
+            >
+              <Txt style={s.closeButtonText}>{buttonTxt}</Txt>
             </TouchableOpacity>
           </View>
         </View>

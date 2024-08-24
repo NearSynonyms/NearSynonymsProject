@@ -176,6 +176,8 @@ export default function ProfileScreen({ route, navigation }) {
             onClose={() => setPopupVisible(false)}
             title={popupTitle}
             content={popupContent}
+            backgroundColor="#8c60a1"
+            buttonTxt="Close"
           />
         </View>
         <View style={s.bottomLine}></View>

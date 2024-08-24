@@ -1,5 +1,5 @@
 import axios from "axios";
-import { sentences } from "./dummydata";
+import { sentences, guideSentence } from "./dummydata";
 
 class ApiService {
   constructor(baseURL) {
@@ -23,18 +23,27 @@ class ApiService {
   }
 
   // GET: Retrieve an array of 10 objects based on user's difficulty level
-  async getSentences(userId, guideFlag) {
+  async getSentences(userId) {
     try {
-      const response = await this.api.get(
-        `/GetSentences/?token=${userId}&guideFlag=${guideFlag}`
-      );
+      const response = await this.api.get(`/GetSentences/?token=${userId}`);
       return response.data;
     } catch (error) {
       return sentences;
       //this.handleError(error);
     }
   }
-
+  // GET: Retrieve an sentence for the tutorial section
+  async getTutorialSentence(userId) {
+    try {
+      const response = await this.api.get(
+        `/GetTutorialSentences/?token=${userId}`
+      );
+      return response.data;
+    } catch (error) {
+      return guideSentence;
+      //this.handleError(error);
+    }
+  }
   // PUT: Update user's image and difficulty level
   async updateUserProfile(formData) {
     try {

@@ -1,10 +1,12 @@
 export const sentences = [
   {
-    partial_sentence: "The ____ man greeted us warmly.",
-    first_word: "kind",
-    second_word: "polite",
-    correct_word: "kind",
-    sentence: "The kind man greeted us warmly.",
+    partial_sentence:
+      "Umm, okay, okay, look. I took this picture from your fridge. Okay, because I know that this is my Father. Yeah, this is Frank Buffay and you are standing ______ there next to him. Now, look I deserve to know where I came from. All right? So if you can help me find my Father then you should! Otherwise, youre just mean! So, just tell me the truth!",
+    first_word: "correct",
+    second_word: "right",
+    correct_word: "correct",
+    sentence:
+      "Umm, okay, okay, look. I took this picture from your fridge. Okay, because I know that this is my Father. Yeah, this is Frank Buffay and you are standing correct there next to him. Now, look I deserve to know where I came from. All right? So if you can help me find my Father then you should! Otherwise, youre just mean! So, just tell me the truth!",
   },
   {
     partial_sentence: "She felt ____ after the long run.",
@@ -68,5 +70,17 @@ export const sentences = [
     second_word: "plush",
     correct_word: "soft",
     sentence: "The soft cat curled up on the sofa.",
+  },
+];
+
+export const guideSentence = [
+  {
+    first_word: "great",
+    first_sentence: "That is great Joe!",
+    second_word: "grand",
+    second_sentence: "The grand staircase was the centerpiece of the mansion.",
+    partial_sentence: "Our guys a ______ dancer!",
+    sentence: "Our guys a great dancer!",
+    correct_word: "great",
   },
 ];

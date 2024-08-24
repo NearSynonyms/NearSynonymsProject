@@ -19,12 +19,6 @@ export const s = StyleSheet.create({
     resizeMode: "stretch",
     width: "100%",
   },
-  exitButton: {
-    position: "absolute",
-    top: 80,
-    left: 30,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-  },
   exitButtonText: {
     color: "#000",
     fontWeight: "bold",
@@ -101,13 +95,14 @@ export const s = StyleSheet.create({
     flex: 0.8,
   },
   exitButton: {
-    marginLeft: 20,
+    position: "absolute",
     width: 50,
     height: 50,
     borderWidth: 1,
     borderColor: "white",
     borderRadius: 38,
-    marginTop: 30,
+    left: 30,
+    bottom: 30,
   },
   exitIconView: {
     marginTop: 10,
