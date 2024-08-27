@@ -18,7 +18,7 @@ export default function Timer({ onTimerEnd, reset, stop }) {
     isRunning.current = true;
     animation.current = Animated.timing(timerWidth, {
       toValue: 0,
-      duration: 10000, // 45 seconds
+      duration: 60000, // 45 seconds
       useNativeDriver: false,
     });
     animation.current.start(() => {

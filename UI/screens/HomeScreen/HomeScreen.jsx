@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   ImageBackground,
@@ -13,6 +13,7 @@ import { BlurredBorderImage } from "../../components/blurredBorderImage/BlurredB
 import AnimatedQuestionMark from "../../components/animatedQuestionMark/AnimatedQuestionMark";
 import Icon from "react-native-vector-icons/FontAwesome";
 import GuidePopup from "../../components/guidePopup/GuidePopup";
+import { sounds, playSoundEffect } from "../../sounds/SoundManager";
 
 const { width, height } = Dimensions.get("window");
 
@@ -73,22 +74,30 @@ export default function HomeScreen({ navigation, user }) {
         <View style={s.btnView}>
           <TouchableOpacity
             style={s.btn}
-            onPress={() =>
+            onPress={() => {
+              playSoundEffect(sounds.buttonClick);
               navigation.navigate("Game", {
                 backgroundImg,
                 homeLogo,
                 appBarImg,
                 exitIcon,
                 user,
-              })
-            }
+              });
+            }}
           >
             <View style={s.btnContent}>
               <Txt style={s.btnTxt}>Play</Txt>
               <Icon name="play" size={30} color={"#fff"} />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={s.btn} onPress={() => setGuideVisible(true)}>
+
+          <TouchableOpacity
+            style={s.btn}
+            onPress={() => {
+              playSoundEffect(sounds.buttonClick);
+              setGuideVisible(true);
+            }}
+          >
             <View style={s.btnContent}>
               <Txt style={s.btnTxt}>Guide </Txt>
               <Icon name="question-circle" size={30} color={"#fff"} />
@@ -96,15 +105,16 @@ export default function HomeScreen({ navigation, user }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={s.btn}
-            onPress={() =>
+            onPress={() => {
+              playSoundEffect(sounds.buttonClick);
               navigation.navigate("Learn", {
                 learnBackground,
                 exitIcon,
                 homeLogo,
                 chatGPTLogo,
                 user,
-              })
-            }
+              });
+            }}
           >
             <View style={s.btnContent}>
               <Txt style={s.btnTxt}>Learn</Txt>
@@ -115,13 +125,14 @@ export default function HomeScreen({ navigation, user }) {
         <View style={s.footer}>
           <TouchableOpacity
             style={s.fotterBtn}
-            onPress={() =>
+            onPress={() => {
+              playSoundEffect(sounds.buttonClick);
               navigation.navigate("Profile", {
                 backgroundImg,
                 homeLogo,
                 user,
-              })
-            }
+              });
+            }}
           >
             <Icon name="cogs" size={35} color={"#fff"} />
           </TouchableOpacity>

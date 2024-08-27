@@ -14,6 +14,7 @@ import Popup from "../../components/popup/Popup";
 import SignOut from "../../components/signOut/SignOut";
 import { s } from "./ProfileScreen.style";
 import apiService from "../../API/ApiService";
+import { sounds, playSoundEffect } from "../../sounds/SoundManager";
 
 export default function ProfileScreen({ route, navigation }) {
   const { backgroundImg, homeLogo, user } = route.params;
@@ -124,7 +125,10 @@ export default function ProfileScreen({ route, navigation }) {
       <ScrollView>
         <View style={s.header}>
           <TouchableOpacity
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              playSoundEffect(sounds.buttonClick);
+              navigation.goBack();
+            }}
             style={s.backButton}
           >
             <Icon name="arrow-left" size={20} color="#fff" />
@@ -157,16 +161,20 @@ export default function ProfileScreen({ route, navigation }) {
           <Txt style={s.sectionTitle}>Support</Txt>
 
           <TouchableOpacity
-            onPress={() =>
-              handlePressOnSupportSuction("Contact", "nearsynonyms@gmail.com")
-            }
+            onPress={() => {
+              playSoundEffect(sounds.buttonClick);
+              handlePressOnSupportSuction("Contact", "nearsynonyms@gmail.com");
+            }}
           >
             <Txt style={s.buttonsText}>Contact</Txt>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={s.aboutUs}
-            onPress={() => handlePressOnSupportSuction("About Us", aboutUsText)}
+            onPress={() => {
+              playSoundEffect(sounds.buttonClick);
+              handlePressOnSupportSuction("About Us", aboutUsText);
+            }}
           >
             <Txt style={s.buttonsText}>About us</Txt>
           </TouchableOpacity>
@@ -184,22 +192,24 @@ export default function ProfileScreen({ route, navigation }) {
         <View style={s.fotter}>
           <TouchableOpacity
             style={s.saveBtn}
-            onPress={() =>
+            onPress={() => {
+              playSoundEffect(sounds.buttonClick);
               handlePressOnSave(
                 "Update Changes",
                 "Your changes have been successfully updated"
-              )
-            }
+              );
+            }}
           >
             <Txt style={s.saveTxt}>Save Changes</Txt>
           </TouchableOpacity>
           <SignOut
-            onSignOut={() =>
+            onSignOut={() => {
+              playSoundEffect(sounds.buttonClick);
               handlePressOnSave(
                 "Update Changes",
                 "Your changes have been successfully updated"
-              )
-            }
+              );
+            }}
           />
         </View>
       </ScrollView>

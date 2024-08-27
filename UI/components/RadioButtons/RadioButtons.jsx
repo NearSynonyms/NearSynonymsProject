@@ -2,6 +2,8 @@ import React from "react";
 import { View, TouchableOpacity } from "react-native";
 import { s } from "./RadioButtons.style";
 import { Txt } from "../Txt/Txt";
+import { sounds, playSoundEffect } from "../../sounds/SoundManager";
+
 export default function RadioButtons({ options, selectedOption, onSelect }) {
   return (
     <View style={s.container}>
@@ -9,7 +11,10 @@ export default function RadioButtons({ options, selectedOption, onSelect }) {
         <TouchableOpacity
           key={index}
           style={s.optionContainer}
-          onPress={() => onSelect(option)}
+          onPress={() => {
+            playSoundEffect(sounds.buttonClick);
+            onSelect(option);
+          }}
         >
           <View style={s.circle}>
             {selectedOption === option && <View style={s.checkedCircle} />}

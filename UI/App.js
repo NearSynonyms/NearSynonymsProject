@@ -14,7 +14,11 @@ import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as SecureStore from "expo-secure-store";
-import apiService from "./API/ApiService";
+import {
+  playBackgroundMusic,
+  stopBackgroundMusic,
+  sounds,
+} from "./sounds/SoundManager.js";
 
 const Stack = createStackNavigator();
 
@@ -40,6 +44,12 @@ const MainApp = () => {
   const [isFontLoaded] = useFonts({
     "Alata-Regular": require("./assets/Fonts/Alata-Regular.ttf"),
   });
+  useEffect(() => {
+    playBackgroundMusic(sounds.homeBackground);
+    return () => {
+      stopBackgroundMusic();
+    };
+  }, []);
   return (
     <NavigationContainer>
       {isFontLoaded && (

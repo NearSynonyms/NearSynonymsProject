@@ -3,7 +3,11 @@ import { View, Text, Modal, TouchableOpacity, Image } from "react-native";
 import { s } from "./GuidePopup.style";
 import { usePreloadAssets } from "../../hooks/usePreloadAssets";
 import { Txt } from "../Txt/Txt";
-
+import {
+  sounds,
+  playSoundEffect,
+  setBackgroundMusicVolume,
+} from "../../sounds/SoundManager";
 export default function GuidePopup({ visible, onClose }) {
   const [step, setStep] = useState(0);
 
@@ -15,7 +19,11 @@ export default function GuidePopup({ visible, onClose }) {
   const isReady = usePreloadAssets(assetsForGuide);
   const [questionImg, setQuestionImg] = useState(null);
   const [answerImg, setAnswerImg] = useState(null);
-
+  useEffect(() => {
+    if (visible) {
+      playSoundEffect(sounds.popup);
+    }
+  }, [visible]);
   useEffect(() => {
     if (isReady) {
       setQuestionImg(assetsForGuide[0]);
@@ -65,7 +73,13 @@ export default function GuidePopup({ visible, onClose }) {
               • The user must choose the word he thinks is more correct.
             </Txt>
 
-            <TouchableOpacity style={s.nextButton} onPress={handleNext}>
+            <TouchableOpacity
+              style={s.nextButton}
+              onPress={() => {
+                playSoundEffect(sounds.buttonClick);
+                handleNext();
+              }}
+            >
               <Txt style={s.buttonText}>Next</Txt>
             </TouchableOpacity>
           </View>
@@ -75,10 +89,22 @@ export default function GuidePopup({ visible, onClose }) {
           <View style={s.content}>
             <Image source={questionImg} style={s.image} />
             <View style={s.buttonRow}>
-              <TouchableOpacity style={s.prevButton} onPress={handlePrev}>
+              <TouchableOpacity
+                style={s.prevButton}
+                onPress={() => {
+                  playSoundEffect(sounds.buttonClick);
+                  handlePrev();
+                }}
+              >
                 <Txt style={s.buttonText}>Prev</Txt>
               </TouchableOpacity>
-              <TouchableOpacity style={s.nextButton} onPress={handleNext}>
+              <TouchableOpacity
+                style={s.nextButton}
+                onPress={() => {
+                  playSoundEffect(sounds.buttonClick);
+                  handleNext();
+                }}
+              >
                 <Txt style={s.buttonText}>Next</Txt>
               </TouchableOpacity>
             </View>
@@ -89,10 +115,22 @@ export default function GuidePopup({ visible, onClose }) {
           <View style={s.content}>
             <Image source={answerImg} style={s.image} />
             <View style={s.buttonRow}>
-              <TouchableOpacity style={s.prevButton} onPress={handlePrev}>
+              <TouchableOpacity
+                style={s.prevButton}
+                onPress={() => {
+                  playSoundEffect(sounds.buttonClick);
+                  handlePrev();
+                }}
+              >
                 <Txt style={s.buttonText}>Prev</Txt>
               </TouchableOpacity>
-              <TouchableOpacity style={s.nextButton} onPress={onGuideClose}>
+              <TouchableOpacity
+                style={s.nextButton}
+                onPress={() => {
+                  playSoundEffect(sounds.buttonClick);
+                  onGuideClose();
+                }}
+              >
                 <Txt style={s.buttonText}>Close</Txt>
               </TouchableOpacity>
             </View>
@@ -113,7 +151,13 @@ export default function GuidePopup({ visible, onClose }) {
       <View style={s.overlay}>
         <View style={s.popup}>
           <View style={s.header}>
-            <TouchableOpacity style={s.closeButton} onPress={onGuideClose}>
+            <TouchableOpacity
+              style={s.closeButton}
+              onPress={() => {
+                playSoundEffect(sounds.buttonClick);
+                onGuideClose();
+              }}
+            >
               <Txt style={s.closeButtonText}>X</Txt>
             </TouchableOpacity>
             <Txt style={s.title}>Guide</Txt>

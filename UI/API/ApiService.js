@@ -67,5 +67,5 @@ class ApiService {
   }
 }
 
-const apiService = new ApiService("http://34.201.71.153:3000");
+const apiService = new ApiService("http://98.81.60.255:3000");
 export default apiService;

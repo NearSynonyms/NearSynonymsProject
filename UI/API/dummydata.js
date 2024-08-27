@@ -73,14 +73,12 @@ export const sentences = [
   },
 ];
 
-export const guideSentence = [
-  {
-    first_word: "great",
-    first_sentence: "That is great Joe!",
-    second_word: "grand",
-    second_sentence: "The grand staircase was the centerpiece of the mansion.",
-    partial_sentence: "Our guys a ______ dancer!",
-    sentence: "Our guys a great dancer!",
-    correct_word: "great",
-  },
-];
+export const guideSentence = {
+  first_word: "great",
+  first_sentence: "That is great Joe!",
+  second_word: "grand",
+  second_sentence: "The grand staircase was the centerpiece of the mansion.",
+  partial_sentence: "Our guys a ______ dancer!",
+  sentence: "Our guys a great dancer!",
+  correct_word: "great",
+};

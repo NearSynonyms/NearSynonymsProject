@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Modal, TouchableOpacity } from "react-native";
 import { Txt } from "../Txt/Txt";
 import { s } from "./Popup.style";
-
+import { sounds, playSoundEffect } from "../../sounds/SoundManager";
 export default function Popup({
   visible,
   onClose,
@@ -11,6 +11,11 @@ export default function Popup({
   backgroundColor,
   buttonTxt,
 }) {
+  useEffect(() => {
+    if (visible) {
+      playSoundEffect(sounds.popup);
+    }
+  }, [visible]);
   return (
     <Modal
       transparent={true}
@@ -26,7 +31,10 @@ export default function Popup({
           <View style={s.viewInfo}>
             <Txt style={s.content}>{content}</Txt>
             <TouchableOpacity
-              onPress={onClose}
+              onPress={() => {
+                playSoundEffect(sounds.buttonClick);
+                onClose();
+              }}
               style={[s.closeButton, { backgroundColor }]}
             >
               <Txt style={s.closeButtonText}>{buttonTxt}</Txt>

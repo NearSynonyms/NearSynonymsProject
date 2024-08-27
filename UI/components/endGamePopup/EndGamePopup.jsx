@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Modal, TouchableOpacity } from "react-native";
 import { Txt } from "../Txt/Txt";
 import { s } from "./EndGamePopup.style";
 import { Fireworks } from "../fireworks/Fireworks";
+import {
+  sounds,
+  playSoundEffect,
+  setBackgroundMusicVolume,
+} from "../../sounds/SoundManager";
 
 export default function EndGamePopup({
   visible,
@@ -14,6 +19,15 @@ export default function EndGamePopup({
   isConfetti,
   btn2Txt,
 }) {
+  useEffect(() => {
+    if (visible) {
+      setBackgroundMusicVolume(0);
+      playSoundEffect(sounds.popup);
+    } else {
+      setBackgroundMusicVolume(1);
+    }
+  }, [visible]);
+
   return (
     <Modal
       transparent={true}

@@ -13,6 +13,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import EndGamePopup from "../../components/endGamePopup/EndGamePopup";
 import Gameplay from "../../GameLogic/Gameplay";
 import Loading from "../../components/loading/Loading";
+import {
+  playBackgroundMusic,
+  stopBackgroundMusic,
+  sounds,
+  playSoundEffect,
+  setBackgroundMusicVolume,
+} from "../../sounds/SoundManager";
+
 export default function GameScreen({ route, navigation }) {
   const { backgroundImg, homeLogo, appBarImg, exitIcon, user } = route.params;
   const [gameplay, setGameplay] = useState(null);
@@ -44,6 +52,13 @@ export default function GameScreen({ route, navigation }) {
   };
   useEffect(() => {
     initializeGame();
+    stopBackgroundMusic();
+    playBackgroundMusic(sounds.gameBackground);
+
+    return () => {
+      stopBackgroundMusic();
+      playBackgroundMusic(sounds.homeBackground);
+    };
   }, [user.id]);
 
   useEffect(() => {
@@ -89,6 +104,8 @@ export default function GameScreen({ route, navigation }) {
   };
 
   const handleResetGame = async () => {
+    stopBackgroundMusic();
+    playBackgroundMusic(sounds.gameBackground);
     setResetTimer(false);
     setStopTimer(true);
     setPopupVisible(false);
@@ -98,7 +115,7 @@ export default function GameScreen({ route, navigation }) {
       setResetTimer(true);
     }, 0);
   };
-  const handleGameCompleted = () => {
+  const handleGameCompleted = async () => {
     setPopupVisible(false);
     setShowFireworks(true);
     displayPopup(
@@ -107,20 +124,25 @@ export default function GameScreen({ route, navigation }) {
       "Exit",
       "Play Again"
     );
+    await playSoundEffect(sounds.win);
+    stopBackgroundMusic();
   };
-  if (!currentQuestion) {
-    return <Loading backgroundImg={backgroundImg} homeLogo={homeLogo} />;
-  }
 
-  const handleButtonPress = (answer) => {
+  const handleButtonPress = async (answer) => {
     setSelectedAnswer(answer);
+    await setBackgroundMusicVolume(0.3);
     if (answer === currentQuestion.correct_word) {
       setIsAnswerCorrect(true);
+      await playSoundEffect(sounds.correctAnswer);
       handleCorrectAnswer();
     } else {
       setIsAnswerCorrect(false);
+      await playSoundEffect(sounds.incorrectAnswer);
       handleIncorrectAnswer();
     }
+    setTimeout(async () => {
+      await setBackgroundMusicVolume(0.7);
+    }, 500);
   };
 
   const handleCorrectAnswer = () => {
@@ -137,14 +159,15 @@ export default function GameScreen({ route, navigation }) {
         setCurrentQuestion(question);
         setCurrentIndex(gameplay.getCurrentIndex());
         setResetTimer(true);
+        setSelectedAnswer(null);
       } else {
         handleGameCompleted();
       }
-    }, 2500);
+    }, 1500);
     setResetTimer(false);
   };
 
-  const handleIncorrectAnswer = () => {
+  const handleIncorrectAnswer = async () => {
     setStopTimer(true);
     setDisplayFullSentence(true);
     setTimeout(() => {
@@ -154,8 +177,12 @@ export default function GameScreen({ route, navigation }) {
         "Exit",
         "Try Again"
       );
+      setSelectedAnswer(null);
     }, 2500);
+    await playSoundEffect(sounds.lose);
+    stopBackgroundMusic();
   };
+
   const getButtonStyle = (answer) => {
     if (selectedAnswer === answer) {
       return isAnswerCorrect
@@ -198,6 +225,10 @@ export default function GameScreen({ route, navigation }) {
     "#904ba3",
     "#7943a0",
   ];
+
+  if (!currentQuestion) {
+    return <Loading backgroundImg={backgroundImg} homeLogo={homeLogo} />;
+  }
 
   return (
     <ImageBackground
@@ -255,7 +286,13 @@ export default function GameScreen({ route, navigation }) {
           </TouchableOpacity>
         </View>
         <View style={s.bottomView}>
-          <TouchableOpacity style={s.exitButton} onPress={handleExitButton}>
+          <TouchableOpacity
+            style={s.exitButton}
+            onPress={() => {
+              playSoundEffect(sounds.buttonClick);
+              handleExitButton();
+            }}
+          >
             <View style={s.exitIconView}>
               <Image source={exitIcon} style={s.exitGameIcon} />
             </View>

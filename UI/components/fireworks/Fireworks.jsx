@@ -7,7 +7,7 @@ export function Fireworks() {
       fadeOut={true}
       colors={["#7262be", "#c24ba8", "#ef73b7"]}
       explosionSpeed={350}
-      fallSpeed={5000}
+      fallSpeed={3000}
       style={{
         position: "absolute",
         zIndex: 9999,

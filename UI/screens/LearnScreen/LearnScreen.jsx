@@ -5,7 +5,14 @@ import { s } from "./LearnScreen.style";
 import Popup from "../../components/popup/Popup";
 import Tutorial from "../../GameLogic/Tutorial";
 import Loading from "../../components/loading/Loading";
-
+import {
+  playBackgroundMusic,
+  stopBackgroundMusic,
+  sounds,
+  playSoundEffect,
+  setBackgroundMusicVolume,
+} from "../../sounds/SoundManager";
+import { getExplanation } from "../../AI/AIServices";
 export default function LearnScreen({ route, navigation }) {
   const { learnBackground, exitIcon, homeLogo, chatGPTLogo, user } =
     route.params;
@@ -19,21 +26,32 @@ export default function LearnScreen({ route, navigation }) {
   const [displayFullSentence, setDisplayFullSentence] = useState(false);
   const [firstWord, setFirstWord] = useState("");
   const [secondWord, setSecondWord] = useState("");
+  const [explanation, setExplanation] = useState("");
 
   const initializeTutorial = async () => {
     const tutorial = new Tutorial(user);
     await tutorial.init();
     const question = tutorial.getQuestion();
-    setQuestion(question);
-    setSelectedAnswer(null);
-    setIsAnswerCorrect(null);
-    setDisplayFullSentence(false);
-    setFirstWord(capitalizeFirstLetter(question.first_word));
-    setSecondWord(capitalizeFirstLetter(question.second_word));
+    if (question) {
+      setQuestion(question);
+      setFirstWord(capitalizeFirstLetter(question.first_word));
+      setSecondWord(capitalizeFirstLetter(question.second_word));
+      setSelectedAnswer(null);
+      setIsAnswerCorrect(null);
+      setDisplayFullSentence(false);
+    } else {
+      console.error("No valid question available.");
+    }
   };
-
   useEffect(() => {
     initializeTutorial();
+    stopBackgroundMusic();
+    playBackgroundMusic(sounds.tutorialBackground);
+
+    return () => {
+      stopBackgroundMusic();
+      playBackgroundMusic(sounds.homeBackground);
+    };
   }, [user.id]);
 
   useEffect(() => {
@@ -65,6 +83,31 @@ export default function LearnScreen({ route, navigation }) {
       }
     }
   }, [currentIndexPage, firstWord, secondWord]);
+  useEffect(() => {
+    if (currentIndexPage === 2 && selectedAnswer) {
+      const correctSentence = question.sentence;
+      const correctWord = question.correct_word;
+      const incorrectWord = findWrongWord(
+        question.sentence,
+        question.first_word,
+        question.second_word
+      );
+      const wrongSentence = replaceWordInSentence(
+        correctSentence,
+        correctWord,
+        incorrectWord
+      );
+
+      getExplanation(
+        correctSentence,
+        wrongSentence,
+        correctWord,
+        incorrectWord
+      ).then((explanation) => {
+        setExplanation(explanation);
+      });
+    }
+  }, [currentIndexPage, selectedAnswer]);
 
   const handleNext = () => {
     setPopupVisible(true); // Show the popup again when navigating to the next screen
@@ -76,17 +119,23 @@ export default function LearnScreen({ route, navigation }) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  const handleButtonPress = (answer) => {
-    setDisplayFullSentence(true);
+  const handleButtonPress = async (answer) => {
     setSelectedAnswer(answer);
+    setDisplayFullSentence(true);
+    await setBackgroundMusicVolume(0.3);
     if (answer === question.correct_word) {
       setIsAnswerCorrect(true);
+      await playSoundEffect(sounds.correctAnswer);
     } else {
       setIsAnswerCorrect(false);
+      await playSoundEffect(sounds.incorrectAnswer);
     }
+    setTimeout(async () => {
+      await setBackgroundMusicVolume(0.7);
+    }, 500);
     setTimeout(() => {
       handleNext();
-    }, 2500);
+    }, 2000);
   };
 
   const getButtonStyle = (answer) => {
@@ -167,7 +216,13 @@ export default function LearnScreen({ route, navigation }) {
               </Txt>
               <Txt style={s.sentenceText}>{question.second_sentence}</Txt>
             </View>
-            <TouchableOpacity onPress={handleNext} style={s.nextButton}>
+            <TouchableOpacity
+              onPress={() => {
+                playSoundEffect(sounds.buttonClick);
+                handleNext();
+              }}
+              style={s.nextButton}
+            >
               <Txt style={s.nextButtonText}>Next</Txt>
             </TouchableOpacity>
           </View>
@@ -216,14 +271,10 @@ export default function LearnScreen({ route, navigation }) {
                 <Txt style={{ color: "#96efffff", fontSize: 18 }}>
                   {selectedAnswer}
                 </Txt>{" "}
-                is {isAnswerCorrect ? "correct" : "incorrect"}:{" "}
+                is {isAnswerCorrect ? "correct" : "incorrect"}:{"\n"}
               </Txt>
               <Txt style={s.explanationText}>
-                "Great" is more appropriate than "grand" in this sentence
-                because "great" emphasizes skill and talent, which is fitting
-                when describing someone's dancing ability. "Grand" often refers
-                to something large or impressive in scale, which doesn't match
-                the context of describing dance skill.
+                {explanation || "Generating explanation..."}
               </Txt>
             </View>
           </View>
@@ -239,6 +290,7 @@ export default function LearnScreen({ route, navigation }) {
       <TouchableOpacity
         style={s.exitButton}
         onPress={() => {
+          playSoundEffect(sounds.buttonClick);
           navigation.goBack();
         }}
       >
