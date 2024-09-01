@@ -73,6 +73,79 @@ export const sentences = [
   },
 ];
 
+export const gameHistory = [
+  {
+    date: "2024-09-15",
+    time: "10:30 AM",
+    difficulty: "Low",
+    correctAnswers: 8,
+    totalQuestions: 10,
+  },
+  {
+    date: "2024-09-14",
+    time: "4:15 PM",
+    difficulty: "Medium",
+    correctAnswers: 7,
+    totalQuestions: 10,
+  },
+  {
+    date: "2024-09-13",
+    time: "2:20 PM",
+    difficulty: "High",
+    correctAnswers: 1,
+    totalQuestions: 10,
+  },
+  {
+    date: "2024-09-12",
+    time: "11:00 AM",
+    difficulty: "Low",
+    correctAnswers: 10,
+    totalQuestions: 10,
+  },
+  {
+    date: "2024-09-11",
+    time: "9:45 AM",
+    difficulty: "Medium",
+    correctAnswers: 9,
+    totalQuestions: 10,
+  },
+  {
+    date: "2024-09-10",
+    time: "8:30 PM",
+    difficulty: "High",
+    correctAnswers: 1,
+    totalQuestions: 10,
+  },
+  {
+    date: "2024-09-09",
+    time: "7:00 PM",
+    difficulty: "Low",
+    correctAnswers: 9,
+    totalQuestions: 10,
+  },
+  {
+    date: "2024-09-08",
+    time: "6:15 PM",
+    difficulty: "Medium",
+    correctAnswers: 6,
+    totalQuestions: 10,
+  },
+  {
+    date: "2024-09-07",
+    time: "5:45 PM",
+    difficulty: "High",
+    correctAnswers: 1,
+    totalQuestions: 10,
+  },
+  {
+    date: "2024-09-06",
+    time: "4:10 PM",
+    difficulty: "Medium",
+    correctAnswers: 8,
+    totalQuestions: 10,
+  },
+];
+
 export const guideSentence = {
   first_word: "great",
   first_sentence: "That is great Joe!",

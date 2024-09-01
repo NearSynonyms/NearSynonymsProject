@@ -1,5 +1,5 @@
 import axios from "axios";
-import { sentences, guideSentence } from "./dummydata";
+import { sentences, guideSentence, gameHistory } from "./dummydata";
 
 class ApiService {
   constructor(baseURL) {
@@ -19,6 +19,15 @@ class ApiService {
       return response.data;
     } catch (error) {
       this.handleError(error);
+    }
+  }
+
+  async getUserHistory(userId) {
+    try {
+      const response = await this.api.get(`/GetUserHistory/?token=${userId}`);
+      return response.data;
+    } catch (error) {
+      return gameHistory;
     }
   }
 

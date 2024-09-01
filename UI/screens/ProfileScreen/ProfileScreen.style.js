@@ -34,9 +34,13 @@ export const s = StyleSheet.create({
     left: 10,
   },
   profileContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     padding: 20,
-    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  imageAndNameContainer: {
+    flexDirection: "row",
+    marginBottom: 20,
   },
 
   imageContainer: {
@@ -48,6 +52,26 @@ export const s = StyleSheet.create({
   profileName: {
     fontSize: 30,
     fontWeight: "bold",
+    color: "#8c60a1",
+  },
+  historyContainer: {
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  historyBtn: {
+    flexDirection: "row",
+  },
+  historyTxt: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#8c60a1",
+  },
+  historyIcon: {
+    width: 30,
+    height: 30,
+    resizeMode: "contain",
+    color: "#8c60a1",
+    marginHorizontal: 10,
   },
   bottomLine: {
     flexDirection: "row",
@@ -56,7 +80,7 @@ export const s = StyleSheet.create({
     marginHorizontal: 20,
   },
   section: {
-    marginTop: 20,
+    marginTop: 10,
     marginHorizontal: 20,
   },
   sectionTitle: {

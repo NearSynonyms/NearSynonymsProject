@@ -27,6 +27,7 @@ export default function LearnScreen({ route, navigation }) {
   const [firstWord, setFirstWord] = useState("");
   const [secondWord, setSecondWord] = useState("");
   const [explanation, setExplanation] = useState("");
+  const [buttonsDisabled, setButtonsDisabled] = useState(false);
 
   const initializeTutorial = async () => {
     const tutorial = new Tutorial(user);
@@ -120,6 +121,8 @@ export default function LearnScreen({ route, navigation }) {
   };
 
   const handleButtonPress = async (answer) => {
+    if (buttonsDisabled) return;
+    setButtonsDisabled(true);
     setSelectedAnswer(answer);
     setDisplayFullSentence(true);
     await setBackgroundMusicVolume(0.3);
@@ -244,6 +247,7 @@ export default function LearnScreen({ route, navigation }) {
                 onPress={() => {
                   handleButtonPress(question.first_word);
                 }}
+                disabled={buttonsDisabled}
               >
                 <Txt style={s.optionText}>{question.first_word}</Txt>
               </TouchableOpacity>
@@ -252,6 +256,7 @@ export default function LearnScreen({ route, navigation }) {
                 onPress={() => {
                   handleButtonPress(question.second_word);
                 }}
+                disabled={buttonsDisabled}
               >
                 <Txt style={s.optionText}>{question.second_word}</Txt>
               </TouchableOpacity>

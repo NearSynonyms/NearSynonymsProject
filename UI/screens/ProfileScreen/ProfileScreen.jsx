@@ -5,6 +5,7 @@ import {
   ScrollView,
   SafeAreaView,
   Alert,
+  Image,
 } from "react-native";
 import { Txt } from "../../components/Txt/Txt";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -15,9 +16,16 @@ import SignOut from "../../components/signOut/SignOut";
 import { s } from "./ProfileScreen.style";
 import apiService from "../../API/ApiService";
 import { sounds, playSoundEffect } from "../../sounds/SoundManager";
-
 export default function ProfileScreen({ route, navigation }) {
-  const { backgroundImg, homeLogo, user } = route.params;
+  const {
+    backgroundImg,
+    homeLogo,
+    historyIcon,
+    easyIcon,
+    mediumIcon,
+    highIcon,
+    user,
+  } = route.params;
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedOption, setSelectedOption] = useState("Low");
   const [popupVisible, setPopupVisible] = useState(false);
@@ -136,15 +144,36 @@ export default function ProfileScreen({ route, navigation }) {
           <Txt style={s.headerText}>Settings</Txt>
         </View>
         <View style={s.profileContainer}>
-          <View style={s.imageContainer}>
-            <CircularFrameWithButton
-              onImagePicked={handleImagePicked}
-              selectedImage={selectedImage}
-            />
+          <View style={s.imageAndNameContainer}>
+            <View style={s.imageContainer}>
+              <CircularFrameWithButton
+                onImagePicked={handleImagePicked}
+                selectedImage={selectedImage}
+              />
+            </View>
+            <View style={s.profileInfo}>
+              <Txt style={s.profileName}>{firstName}</Txt>
+              <Txt style={s.profileName}>{lastName}</Txt>
+            </View>
           </View>
-          <View style={s.profileInfo}>
-            <Txt style={s.profileName}>{firstName}</Txt>
-            <Txt style={s.profileName}>{lastName}</Txt>
+          <View style={s.historyContainer}>
+            <TouchableOpacity
+              style={s.historyBtn}
+              onPress={() => {
+                playSoundEffect(sounds.buttonClick);
+                navigation.navigate("History", {
+                  backgroundImg: backgroundImg,
+                  easyIcon: easyIcon,
+                  mediumIcon: mediumIcon,
+                  highIcon: highIcon,
+                  homeLogo: homeLogo,
+                  user: user,
+                });
+              }}
+            >
+              <Txt style={s.historyTxt}>Statistics</Txt>
+              <Image source={historyIcon} style={s.historyIcon}></Image>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={s.bottomLine}></View>

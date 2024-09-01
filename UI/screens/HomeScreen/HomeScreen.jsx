@@ -25,6 +25,10 @@ export default function HomeScreen({ navigation, user }) {
     require("../../assets/icons/ExitGame.png"),
     require("../../assets/Images/learnBackground.png"),
     require("../../assets/icons/chatGptLogo.png"),
+    require("../../assets/icons/historyIcon.png"),
+    require("../../assets/icons/easyIcon.png"),
+    require("../../assets/icons/mediumIcon.png"),
+    require("../../assets/icons/highIcon.png"),
   ];
 
   const isReady = usePreloadAssets(assetsForLoginScreen);
@@ -40,6 +44,10 @@ export default function HomeScreen({ navigation, user }) {
   const exitIcon = assetsForLoginScreen[3];
   const learnBackground = assetsForLoginScreen[4];
   const chatGPTLogo = assetsForLoginScreen[5];
+  const historyIcon = assetsForLoginScreen[6];
+  const easyIcon = assetsForLoginScreen[7];
+  const mediumIcon = assetsForLoginScreen[8];
+  const highIcon = assetsForLoginScreen[9];
 
   const questionMarks = Array.from({ length: 10 }, (_, index) => (
     <AnimatedQuestionMark
@@ -130,6 +138,10 @@ export default function HomeScreen({ navigation, user }) {
               navigation.navigate("Profile", {
                 backgroundImg,
                 homeLogo,
+                historyIcon,
+                easyIcon,
+                mediumIcon,
+                highIcon,
                 user,
               });
             }}

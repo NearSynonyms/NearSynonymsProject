@@ -37,6 +37,7 @@ export default function GameScreen({ route, navigation }) {
   const [stopTimer, setStopTimer] = useState(false);
   const [displayFullSentence, setDisplayFullSentence] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
+  const [buttonsDisabled, setButtonsDisabled] = useState(false);
 
   const initializeGame = async () => {
     const game = new Gameplay(user);
@@ -104,6 +105,7 @@ export default function GameScreen({ route, navigation }) {
   };
 
   const handleResetGame = async () => {
+    setButtonsDisabled(false);
     stopBackgroundMusic();
     playBackgroundMusic(sounds.gameBackground);
     setResetTimer(false);
@@ -129,6 +131,8 @@ export default function GameScreen({ route, navigation }) {
   };
 
   const handleButtonPress = async (answer) => {
+    if (buttonsDisabled) return;
+    setButtonsDisabled(true);
     setSelectedAnswer(answer);
     await setBackgroundMusicVolume(0.3);
     if (answer === currentQuestion.correct_word) {
@@ -152,7 +156,7 @@ export default function GameScreen({ route, navigation }) {
     setTimeout(() => {
       setStopTimer(false);
       setDisplayFullSentence(false);
-
+      setButtonsDisabled(false);
       if (currentIndex < 9) {
         gameplay.incrementIndex();
         const question = gameplay.getCurrentQuestion();
@@ -178,7 +182,8 @@ export default function GameScreen({ route, navigation }) {
         "Try Again"
       );
       setSelectedAnswer(null);
-    }, 2500);
+      setButtonsDisabled(false);
+    }, 1500);
     await playSoundEffect(sounds.lose);
     stopBackgroundMusic();
   };
@@ -274,6 +279,7 @@ export default function GameScreen({ route, navigation }) {
           <TouchableOpacity
             style={getButtonStyle(currentQuestion.first_word)}
             onPress={() => handleButtonPress(currentQuestion.first_word)}
+            disabled={buttonsDisabled}
           >
             <Text style={s.buttonAnswerTxt}>{currentQuestion.first_word}</Text>
           </TouchableOpacity>
@@ -281,6 +287,7 @@ export default function GameScreen({ route, navigation }) {
           <TouchableOpacity
             style={getButtonStyle(currentQuestion.second_word)}
             onPress={() => handleButtonPress(currentQuestion.second_word)}
+            disabled={buttonsDisabled}
           >
             <Text style={s.buttonAnswerTxt}>{currentQuestion.second_word}</Text>
           </TouchableOpacity>
