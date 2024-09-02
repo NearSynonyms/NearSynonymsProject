@@ -15,19 +15,44 @@ class ApiService {
   // GET: Retrieve image and level of user
   async getUserState(userId) {
     try {
-      const response = await this.api.get(`/GetUserDetails/?token=${userId}`);
+      const response = await this.api.get(`/GetOrCreateUser/?token=${userId}`);
       return response.data;
     } catch (error) {
       this.handleError(error);
     }
   }
-
+  // GET: Retrieve user history
   async getUserHistory(userId) {
     try {
-      const response = await this.api.get(`/GetUserHistory/?token=${userId}`);
+      const response = await this.api.get(
+        `/GetUserGameStatistics/?token=${userId}`
+      );
       return response.data;
     } catch (error) {
       return gameHistory;
+    }
+  }
+  // POST: update user history
+  async updateUserHistory(userId, difficulty, date, time, correctAnswer) {
+    try {
+      const response = await this.api.post(
+        "/SaveUserGameStatistics",
+        {
+          token: userId,
+          date: date,
+          time: time,
+          difficulty: difficulty,
+          correct_answers: correctAnswer,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
     }
   }
 
@@ -76,5 +101,5 @@ class ApiService {
   }
 }
 
-const apiService = new ApiService("http://98.81.60.255:3000");
+const apiService = new ApiService("http://44.213.134.40:3000");
 export default apiService;

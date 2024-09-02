@@ -13,6 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import EndGamePopup from "../../components/endGamePopup/EndGamePopup";
 import Gameplay from "../../GameLogic/Gameplay";
 import Loading from "../../components/loading/Loading";
+import apiService from "../../API/ApiService";
 import {
   playBackgroundMusic,
   stopBackgroundMusic,
@@ -81,9 +82,10 @@ export default function GameScreen({ route, navigation }) {
     navigation.goBack();
   };
 
-  const handleTimerEnd = () => {
+  const handleTimerEnd = async () => {
     setPopupVisible(false);
     displayPopup("Game Over", "Pay attention to the time", "Exit", "Try Again");
+    await updateHistory(currentIndex);
   };
 
   const handleExitButton = () => {
@@ -119,15 +121,16 @@ export default function GameScreen({ route, navigation }) {
   };
   const handleGameCompleted = async () => {
     setPopupVisible(false);
-    setShowFireworks(true);
     displayPopup(
       "Congratulations!",
       "You've answered all the questions correctly!",
       "Exit",
       "Play Again"
     );
+    setShowFireworks(true);
     await playSoundEffect(sounds.win);
     stopBackgroundMusic();
+    await updateHistory(10);
   };
 
   const handleButtonPress = async (answer) => {
@@ -155,9 +158,9 @@ export default function GameScreen({ route, navigation }) {
 
     setTimeout(() => {
       setStopTimer(false);
-      setDisplayFullSentence(false);
       setButtonsDisabled(false);
       if (currentIndex < 9) {
+        setDisplayFullSentence(false);
         gameplay.incrementIndex();
         const question = gameplay.getCurrentQuestion();
         setCurrentQuestion(question);
@@ -167,7 +170,7 @@ export default function GameScreen({ route, navigation }) {
       } else {
         handleGameCompleted();
       }
-    }, 1500);
+    }, 1000);
     setResetTimer(false);
   };
 
@@ -186,6 +189,7 @@ export default function GameScreen({ route, navigation }) {
     }, 1500);
     await playSoundEffect(sounds.lose);
     stopBackgroundMusic();
+    await updateHistory(currentIndex);
   };
 
   const getButtonStyle = (answer) => {
@@ -209,6 +213,46 @@ export default function GameScreen({ route, navigation }) {
       </Txt>
     );
   };
+  const getFormattedDate = () => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = now.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
+    return formattedDate;
+  };
+  const getFormattedTime = () => {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
+  };
+  async function updateHistory(correctAnswer) {
+    try {
+      const data = await apiService.getUserState(user.id);
+      console.log(data);
+      const difficulty =
+        data.difficulty === 3
+          ? "High"
+          : data.difficulty === 2
+          ? "Medium"
+          : "Low";
+
+      console.log(difficulty);
+
+      const date = getFormattedDate();
+      const time = getFormattedTime();
+      await apiService.updateUserHistory(
+        user.id,
+        difficulty,
+        date,
+        time,
+        correctAnswer
+      );
+    } catch (error) {
+      console.error("Error in updateHistory:", error);
+    }
+  }
 
   const borderColors = [
     "#7262be",

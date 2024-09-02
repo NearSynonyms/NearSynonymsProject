@@ -59,7 +59,7 @@ export default function HistoryScreen({ route, navigation }) {
       (game) => game.difficulty === difficulty
     );
     const totalCorrectAnswers = filteredGames.reduce(
-      (sum, game) => sum + game.correctAnswers,
+      (sum, game) => sum + game.correct_answers,
       0
     );
     return filteredGames.length > 0
@@ -87,7 +87,7 @@ export default function HistoryScreen({ route, navigation }) {
           />
         </View>
         <Txt style={s.correctAnswers}>
-          Correct Answers: {item.correctAnswers}/10
+          Correct Answers: {item.correct_answers}/10
         </Txt>
       </View>
     </LinearGradient>
