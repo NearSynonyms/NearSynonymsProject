@@ -3,7 +3,6 @@ import {
   View,
   SafeAreaView,
   ImageBackground,
-  ScrollView,
   FlatList,
   Image,
   TouchableOpacity,
@@ -107,32 +106,34 @@ export default function HistoryScreen({ route, navigation }) {
 
   return (
     <ImageBackground source={backgroundImg} style={s.img_background}>
-      <SafeAreaView>
-        <ScrollView contentContainerStyle={s.scrollViewContent}>
-          <TouchableOpacity
-            onPress={() => {
-              playSoundEffect(sounds.buttonClick);
-              navigation.goBack();
-            }}
-            style={s.backButton}
-          >
-            <Icon name="arrow-left" size={25} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={s.viewProgressButton}
-            onPress={() => {
-              playSoundEffect(sounds.buttonClick);
-              handleViewProgress();
-            }}
-          >
-            <Txt style={s.viewProgressButtonText}>View Progress</Txt>
-          </TouchableOpacity>
-          <FlatList
-            data={gameHistory}
-            renderItem={renderHistoryItem}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </ScrollView>
+      <SafeAreaView style={s.safeArea}>
+        <TouchableOpacity
+          onPress={() => {
+            playSoundEffect(sounds.buttonClick);
+            navigation.goBack();
+          }}
+          style={s.backButton}
+        >
+          <Icon name="arrow-left" size={25} color="#fff" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={s.viewProgressButton}
+          onPress={() => {
+            playSoundEffect(sounds.buttonClick);
+            handleViewProgress();
+          }}
+        >
+          <Txt style={s.viewProgressButtonText}>View Progress</Txt>
+        </TouchableOpacity>
+
+        <FlatList
+          data={gameHistory}
+          renderItem={renderHistoryItem}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={s.flatListContent}
+        />
+
         <StatsPopup
           visible={popupVisible}
           onClose={() => setPopupVisible(false)}

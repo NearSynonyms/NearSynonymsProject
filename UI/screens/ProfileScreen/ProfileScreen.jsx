@@ -7,6 +7,7 @@ import {
   Alert,
   Image,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { Txt } from "../../components/Txt/Txt";
 import Icon from "react-native-vector-icons/FontAwesome";
 import CircularFrameWithButton from "../../components/circularFrameWithButton/CircularFrameWithButton";
@@ -15,7 +16,9 @@ import Popup from "../../components/popup/Popup";
 import SignOut from "../../components/signOut/SignOut";
 import { s } from "./ProfileScreen.style";
 import apiService from "../../API/ApiService";
+import Loading from "../../components/loading/Loading";
 import { sounds, playSoundEffect } from "../../sounds/SoundManager";
+
 export default function ProfileScreen({ route, navigation }) {
   const {
     backgroundImg,
@@ -31,28 +34,36 @@ export default function ProfileScreen({ route, navigation }) {
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupTitle, setPopupTitle] = useState("");
   const [popupContent, setPopupContent] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isSignOut, setIsSignOut] = useState(false);
   const options = ["Low", "Medium", "High"];
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (user && user.id) {
-        try {
-          const data = await apiService.getUserState(user.id);
-          console.log(data);
-          setSelectedImage(data?.picture || null);
-
-          const difficulty = parseInt(data?.difficulty, 10);
-          setSelectedOption(
-            difficulty === 3 ? "High" : difficulty === 2 ? "Medium" : "Low"
-          );
-        } catch (error) {
-          console.error("Failed to fetch user data:", error);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUserData = async () => {
+        if (user && user.id) {
+          try {
+            const data = await apiService.getUserState(user.id);
+            setSelectedImage(data?.picture || null);
+            const difficulty = parseInt(data?.difficulty, 10);
+            setSelectedOption(
+              difficulty === 3 ? "High" : difficulty === 2 ? "Medium" : "Low"
+            );
+          } catch (error) {
+            console.error("Failed to fetch user data:", error);
+          }
         }
-      }
-    };
+      };
 
-    fetchUserData();
-  }, [user]);
+      fetchUserData();
+    }, [user])
+  );
+
+  useEffect(() => {
+    if (selectedImage) {
+      setSelectedImage(selectedImage);
+    }
+  }, [selectedImage, loading]);
 
   const isHebrew = (string) => {
     return /[\u0590-\u05FF]/.test(string);
@@ -85,6 +96,7 @@ export default function ProfileScreen({ route, navigation }) {
   };
 
   const handlePressOnSave = async (title, content) => {
+    setLoading(true);
     try {
       const token = user.id;
       const difficulty = textLevelToInteger();
@@ -111,6 +123,12 @@ export default function ProfileScreen({ route, navigation }) {
       setPopupVisible(true);
     } catch (error) {
       Alert.alert("Error", "Failed to save the changes.");
+    } finally {
+      if (!isSignOut) {
+        const data = await apiService.getUserState(user.id);
+        setSelectedImage(data?.picture || null);
+      }
+      setLoading(false);
     }
   };
 
@@ -127,6 +145,9 @@ export default function ProfileScreen({ route, navigation }) {
   
   • Together, we are committed to leveraging our skills and knowledge to develop impactful solutions.
   `;
+  if (loading) {
+    return <Loading backgroundImg={backgroundImg} homeLogo={homeLogo} />;
+  }
 
   return (
     <SafeAreaView style={s.container}>
@@ -210,7 +231,9 @@ export default function ProfileScreen({ route, navigation }) {
 
           <Popup
             visible={popupVisible}
-            onClose={() => setPopupVisible(false)}
+            onClose={() => {
+              setPopupVisible(false);
+            }}
             title={popupTitle}
             content={popupContent}
             backgroundColor="#8c60a1"
@@ -234,6 +257,7 @@ export default function ProfileScreen({ route, navigation }) {
           <SignOut
             onSignOut={() => {
               playSoundEffect(sounds.buttonClick);
+              setIsSignOut(true);
               handlePressOnSave(
                 "Update Changes",
                 "Your changes have been successfully updated"

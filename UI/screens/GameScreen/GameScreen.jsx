@@ -230,15 +230,12 @@ export default function GameScreen({ route, navigation }) {
   async function updateHistory(correctAnswer) {
     try {
       const data = await apiService.getUserState(user.id);
-      console.log(data);
       const difficulty =
         data.difficulty === 3
           ? "High"
           : data.difficulty === 2
           ? "Medium"
           : "Low";
-
-      console.log(difficulty);
 
       const date = getFormattedDate();
       const time = getFormattedTime();

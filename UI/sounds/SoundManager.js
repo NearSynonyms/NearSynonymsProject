@@ -1,4 +1,3 @@
-// sounds/SoundManager.js
 import { Audio } from "expo-av";
 
 export const sounds = {

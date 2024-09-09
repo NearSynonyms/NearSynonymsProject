@@ -1,12 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, Button } from "react-native";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  useAuth,
-  useUser,
-} from "@clerk/clerk-expo";
+import React, { useEffect } from "react";
+import { LogBox } from "react-native";
+import { ClerkProvider, SignedIn, SignedOut, useUser } from "@clerk/clerk-expo";
 import AppNavigator from "./navigation/AppNavigator";
 import { EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY } from "@env";
 import AuthScreen from "./screens/AuthScreen/AuthScreen";
@@ -19,6 +13,11 @@ import {
   stopBackgroundMusic,
   sounds,
 } from "./sounds/SoundManager.js";
+
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+  "Linking requires a build-time setting `scheme` in the project's Expo config",
+]);
 
 const Stack = createStackNavigator();
 

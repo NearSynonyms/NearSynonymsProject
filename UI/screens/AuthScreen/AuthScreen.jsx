@@ -8,7 +8,6 @@ import { FacebookLoginButton } from "../../components/facebookButton/FacebookLog
 import { s } from "./AuthScreen.style";
 import { Txt } from "../../components/Txt/Txt";
 import { usePreloadAssets } from "../../hooks/usePreloadAssets";
-////////////////////////////////////////////////////////
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -29,7 +28,6 @@ export default function AuthScreen({ navigation }) {
       if (createdSessionId) {
         setActive({ session: createdSessionId });
       } else {
-        // Use signIn or signUp for next steps such as MFA
       }
     } catch (err) {
       console.error("OAuth error", err);
@@ -44,7 +42,6 @@ export default function AuthScreen({ navigation }) {
       if (createdSessionId) {
         setActive({ session: createdSessionId });
       } else {
-        // Use signIn or signUp for next steps such as MFA
       }
     } catch (err) {
       console.error("OAuth error", err);

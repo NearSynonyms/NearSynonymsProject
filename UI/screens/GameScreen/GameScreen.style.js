@@ -1,7 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-const { height } = Dimensions.get("window");
-
 export const s = StyleSheet.create({
   img_background: {
     width: "100%",

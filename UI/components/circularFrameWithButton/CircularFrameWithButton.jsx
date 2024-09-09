@@ -11,7 +11,6 @@ export default function CircularFrameWithButton({
   const [imageUri, setImageUri] = useState(null);
 
   useEffect(() => {
-    // Update local state when the selectedImage prop changes
     setImageUri(selectedImage);
   }, [selectedImage]);
 
@@ -26,7 +25,7 @@ export default function CircularFrameWithButton({
           "Permission to access the gallery is required to change the profile picture.",
           [{ text: "OK" }]
         );
-        return; // If permission is denied, do nothing.
+        return;
       }
     }
 
@@ -40,8 +39,8 @@ export default function CircularFrameWithButton({
 
     if (!result.canceled) {
       const imageUri = result.assets[0].uri;
-      setImageUri(imageUri); // Update the local state
-      onImagePicked(imageUri); // Notify the parent component
+      setImageUri(imageUri);
+      onImagePicked(imageUri);
     }
   };
 

@@ -9,7 +9,7 @@ export default function Timer({ onTimerEnd, reset, stop }) {
   useEffect(() => {
     if (reset) {
       isRunning.current = false;
-      timerWidth.setValue(1); // Reset the timer width to full
+      timerWidth.setValue(1);
       startTimer();
     }
   }, [reset]);
@@ -18,7 +18,7 @@ export default function Timer({ onTimerEnd, reset, stop }) {
     isRunning.current = true;
     animation.current = Animated.timing(timerWidth, {
       toValue: 0,
-      duration: 60000, // 45 seconds
+      duration: 60000,
       useNativeDriver: false,
     });
     animation.current.start(() => {

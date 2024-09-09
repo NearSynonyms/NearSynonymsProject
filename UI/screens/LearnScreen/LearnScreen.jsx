@@ -111,7 +111,7 @@ export default function LearnScreen({ route, navigation }) {
   }, [currentIndexPage, selectedAnswer]);
 
   const handleNext = () => {
-    setPopupVisible(true); // Show the popup again when navigating to the next screen
+    setPopupVisible(true);
     setCurrentIndexPage((prevIndex) => prevIndex + 1);
   };
 

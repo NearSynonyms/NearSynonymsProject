@@ -8,7 +8,7 @@ class ApiService {
       headers: {
         "Content-Type": "application/json",
       },
-      timeout: 3000,
+      timeout: 6000,
     });
   }
 
@@ -63,7 +63,6 @@ class ApiService {
       return response.data;
     } catch (error) {
       return sentences;
-      //this.handleError(error);
     }
   }
   // GET: Retrieve an sentence for the tutorial section
@@ -75,7 +74,6 @@ class ApiService {
       return response.data;
     } catch (error) {
       return guideSentence;
-      //this.handleError(error);
     }
   }
   // PUT: Update user's image and difficulty level
@@ -101,5 +99,5 @@ class ApiService {
   }
 }
 
-const apiService = new ApiService("http://44.213.134.40:3000");
+const apiService = new ApiService("http://3.236.156.67:3000");
 export default apiService;

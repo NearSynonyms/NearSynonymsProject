@@ -7,11 +7,7 @@ export const s = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
   },
-  scrollViewContent: {
-    padding: 20,
-  },
   backButton: {
-    position: "absolute",
     left: 15,
   },
   card: {

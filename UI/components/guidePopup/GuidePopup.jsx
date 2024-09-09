@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Modal, TouchableOpacity, Image } from "react-native";
+import { View, Modal, TouchableOpacity, Image } from "react-native";
 import { s } from "./GuidePopup.style";
 import { usePreloadAssets } from "../../hooks/usePreloadAssets";
 import { Txt } from "../Txt/Txt";
-import {
-  sounds,
-  playSoundEffect,
-  setBackgroundMusicVolume,
-} from "../../sounds/SoundManager";
+import { sounds, playSoundEffect } from "../../sounds/SoundManager";
 export default function GuidePopup({ visible, onClose }) {
   const [step, setStep] = useState(0);
 

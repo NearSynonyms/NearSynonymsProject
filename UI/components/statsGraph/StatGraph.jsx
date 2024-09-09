@@ -16,9 +16,8 @@ const BarPairWithLine = ({ averageLow, averageMedium, averageHigh }) => {
     backgroundColor: "#8c60a1",
     backgroundGradientFrom: "#8c60a1",
     backgroundGradientTo: "#8c60a1",
-    decimalPlaces: 0, // No decimal places
-
-    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`, // White text color
+    decimalPlaces: 1,
+    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     propsForLabels: {
       fontSize: 14,
@@ -28,12 +27,12 @@ const BarPairWithLine = ({ averageLow, averageMedium, averageHigh }) => {
       borderRadius: 16,
     },
     propsForBackgroundLines: {
-      strokeDasharray: "", // Solid lines
+      strokeDasharray: "",
       strokeWidth: 0.2,
-      stroke: "#ffffff", // Slightly darker line for contrast
+      stroke: "#ffffff",
     },
     yAxisTextStyle: {
-      color: "#ffffff", // White color for Y axis labels
+      color: "#ffffff",
     },
   };
 
@@ -41,15 +40,39 @@ const BarPairWithLine = ({ averageLow, averageMedium, averageHigh }) => {
     <View style={{ padding: 20, alignItems: "center" }}>
       <BarChart
         data={data}
-        width={310} // Adjust this to fit your screen size
-        height={390} // Adjust this to fit your screen size
+        width={310}
+        height={390}
         yAxisLabel=""
+        yAxisSuffix=""
+        fromZero={true}
+        yAxisInterval={0.5}
         chartConfig={chartConfig}
         style={{
           borderRadius: 16,
           padding: 10,
         }}
+        verticalLabelRotation={0}
+        yAxisMin={0}
+        yAxisMax={10}
+        showValuesOnTopOfBars={true}
       />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          width: 310,
+        }}
+      >
+        <Text style={{ color: "#fff", fontWeight: "bold" }}>
+          Low: {averageLow}
+        </Text>
+        <Text style={{ color: "#fff", fontWeight: "bold" }}>
+          Medium: {averageMedium}
+        </Text>
+        <Text style={{ color: "#fff", fontWeight: "bold" }}>
+          High: {averageHigh}
+        </Text>
+      </View>
     </View>
   );
 };

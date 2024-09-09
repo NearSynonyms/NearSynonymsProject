@@ -45,7 +45,7 @@ export const s = StyleSheet.create({
     height: "100%",
     width: "100%",
     resizeMode: "cover",
-    borderRadius: 90, // Half of the width/height to make it circular
+    borderRadius: 90,
   },
   btn: {
     backgroundColor: "#8c60a1",
